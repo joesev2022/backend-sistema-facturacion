@@ -237,9 +237,17 @@ public class ClienteRestController {
 		} catch (MalformedURLException e) {
 			// TODO: handle exception
 		}
-		
+		//Si la foto no existe o no se puede leer
 		if (!recurso.exists() && !recurso.isReadable()) {
-			throw new RuntimeException("Error, no se pudo cargar la imagen: " + nombreFoto);
+			//Hacemos que se muestre la imagen por defecto de usuario
+			rutaArchivo = Paths.get("src/main/resources/static/images").resolve("user-icon.png").toAbsolutePath();
+			try {
+				recurso = new UrlResource(rutaArchivo.toUri());
+			} catch (MalformedURLException e) {
+				// TODO: handle exception
+			}
+			//Y cargamos el error por el log
+			log.error("Error, no se pudo cargar la imagen: " + nombreFoto);
 		}
 		
 		HttpHeaders cabecera = new HttpHeaders();
