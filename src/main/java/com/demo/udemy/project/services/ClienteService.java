@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.demo.udemy.project.entities.ClienteEntity;
+import com.demo.udemy.project.entities.RegionEntity;
 /*
  * Aquí se preparan los métodos que serán implementados en ClienteServiceImpl.
  */
@@ -20,5 +21,7 @@ public interface ClienteService {
 	public ClienteEntity save(ClienteEntity cliente);
 	//Eliminar cliente por id
 	public void delete(Long id);
+	
+	public List<RegionEntity> findAllRegiones();
 	
 }

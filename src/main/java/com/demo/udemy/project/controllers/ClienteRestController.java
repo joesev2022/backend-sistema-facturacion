@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.demo.udemy.project.entities.ClienteEntity;
+import com.demo.udemy.project.entities.RegionEntity;
 import com.demo.udemy.project.services.ClienteService;
 import com.demo.udemy.project.services.IUploadFileService;
 
@@ -139,6 +140,8 @@ public class ClienteRestController {
 			clienteActual.setNombre(cliente.getNombre());
 			clienteActual.setEmail(cliente.getEmail());
 			clienteActual.setCreateAt(cliente.getCreateAt());
+			clienteActual.setRegion(cliente.getRegion());
+			
 			clienteUpdated = clienteService.save(clienteActual);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al actualizar en la base de datos.");
@@ -217,5 +220,10 @@ public class ClienteRestController {
 		cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"");
 		
 		return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+	}
+	
+	@GetMapping("/clientes/regiones")
+	public List<RegionEntity> listarRegiones(){
+		return clienteService.findAllRegiones();
 	}
 }

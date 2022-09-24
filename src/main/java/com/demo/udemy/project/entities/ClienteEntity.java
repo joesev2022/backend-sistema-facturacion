@@ -5,9 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -16,40 +19,47 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
-@Table(name="tb_clientes")
-public class ClienteEntity implements Serializable{
+@Table(name = "tb_clientes")
+public class ClienteEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotEmpty
-	@Size(min=4, max=12)
+	@Size(min = 4, max = 12)
 	@Column(nullable = false)
 	private String nombre;
-	
+
 	@NotEmpty
 	private String apellido;
-	
+
 	@NotEmpty
 	@Email
 	@Column(nullable = false, unique = true)
 	private String email;
-	
-	@NotNull(message="no puede estar vacio")
-	@Column(name="create_at")
+
+	@NotNull(message = "no puede estar vacio")
+	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
-	
+
 	private String foto;
 	
-	//Esto hace colocar la fecha actual antes de la persistencia "save".
-	/*@PrePersist
-	public void prePersist() {
-		createAt = new Date();
-	}*/
-	
+	@NotNull(message = "La región no puede ser vacía")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "region_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	private RegionEntity region;
+
+	// Esto hace colocar la fecha actual antes de la persistencia "save".
+	/*
+	 * @PrePersist public void prePersist() { createAt = new Date(); }
+	 */
+
 	public Long getId() {
 		return id;
 	}
@@ -98,11 +108,17 @@ public class ClienteEntity implements Serializable{
 		this.foto = foto;
 	}
 
+	public RegionEntity getRegion() {
+		return region;
+	}
 
+	public void setRegion(RegionEntity region) {
+		this.region = region;
+	}
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 }
