@@ -1,8 +1,11 @@
 package com.demo.udemy.project.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,6 +23,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -54,11 +59,21 @@ public class ClienteEntity implements Serializable {
 	@JoinColumn(name = "region_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private RegionEntity region;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<FacturaEntity> facturas;
+	
+	
 
 	// Esto hace colocar la fecha actual antes de la persistencia "save".
 	/*
 	 * @PrePersist public void prePersist() { createAt = new Date(); }
 	 */
+
+	public ClienteEntity() {
+		this.facturas = new ArrayList<>();
+	}
 
 	public Long getId() {
 		return id;
@@ -115,6 +130,16 @@ public class ClienteEntity implements Serializable {
 	public void setRegion(RegionEntity region) {
 		this.region = region;
 	}
+
+	public List<FacturaEntity> getFacturas() {
+		return facturas;
+	}
+
+	public void setFacturas(List<FacturaEntity> facturas) {
+		this.facturas = facturas;
+	}
+
+
 
 	/**
 	 * 

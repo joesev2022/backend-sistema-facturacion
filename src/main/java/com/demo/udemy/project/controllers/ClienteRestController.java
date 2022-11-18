@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -61,6 +62,7 @@ public class ClienteRestController {
 	}
 	
 	//Manejamos el error de asegurarnos si se encuentra el id del cliente en la BD
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/clientes/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id) {
 		ClienteEntity cliente = null;
@@ -79,6 +81,7 @@ public class ClienteRestController {
 		return new ResponseEntity<ClienteEntity>(cliente, HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@PostMapping("/clientes")
 	public ResponseEntity<?> create(@Valid @RequestBody ClienteEntity cliente, BindingResult result) {
 		ClienteEntity clienteNew = null;
@@ -111,6 +114,7 @@ public class ClienteRestController {
 	}
 	
 	//Método para ACTUALIZAR Cliente
+	@Secured({"ROLE_ADMIN"})
 	@PutMapping("/clientes/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody ClienteEntity cliente, BindingResult result, @PathVariable Long id) {		
 		//Del id del cliente recibido lo buscamos en la BD y lo almacenamos en un cliente
@@ -154,6 +158,7 @@ public class ClienteRestController {
 	}
 	
 	//Método para ELIMINAR al Cliente (y su imagen)
+	@Secured({"ROLE_ADMIN"})
 	@DeleteMapping("/clientes/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		Map<String, Object> response = new HashMap<>();
@@ -176,6 +181,7 @@ public class ClienteRestController {
 	}
 	
 	//Método para ACTUALIZAR la imagen del cliente
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@PostMapping("/clientes/upload")
 	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") Long id){
 		Map<String, Object> response = new HashMap<>();
@@ -222,6 +228,7 @@ public class ClienteRestController {
 		return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/clientes/regiones")
 	public List<RegionEntity> listarRegiones(){
 		return clienteService.findAllRegiones();
