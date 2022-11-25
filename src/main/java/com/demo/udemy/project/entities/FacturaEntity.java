@@ -22,6 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="tb_facturas")
@@ -39,12 +40,13 @@ public class FacturaEntity implements Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
 	
+	@JsonIgnoreProperties(value={"facturas","hibernateLazyInitializer","handler"}, allowSetters = true)
 	@ManyToOne(fetch=FetchType.LAZY)
 	private ClienteEntity cliente;
 	
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "factura_id")
-	@JsonIgnore
 	private List<DetalleFactura> detalles;
 	
 	public FacturaEntity() {
