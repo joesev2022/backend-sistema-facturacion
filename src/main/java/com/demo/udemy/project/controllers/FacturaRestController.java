@@ -20,7 +20,7 @@ import com.demo.udemy.project.entities.ProductoEntity;
 import com.demo.udemy.project.services.FacturaService;
 import com.demo.udemy.project.services.ProductoService;
 
-@CrossOrigin(origins = {"http://localhost:4200/"})
+@CrossOrigin(origins = {"http://localhost:4200/", "*"})
 @RestController
 @RequestMapping("/api")
 public class FacturaRestController {

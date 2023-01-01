@@ -39,7 +39,7 @@ import com.demo.udemy.project.entities.RegionEntity;
 import com.demo.udemy.project.services.ClienteService;
 import com.demo.udemy.project.services.IUploadFileService;
 
-@CrossOrigin(origins = {"http://localhost:4200/"})
+@CrossOrigin(origins = {"http://localhost:4200/", "*"})
 @RestController
 @RequestMapping("/api")
 public class ClienteRestController {
